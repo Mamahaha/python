@@ -371,8 +371,8 @@ def oauth_usage():
   #print json.dumps(r8.json(), indent = 2)
 
 def get_jenkins_jobs():
-  url1 = 'https://busstv-jenkins.sh.cn.ao.ericsson.se/view/BMC/view/BMC14A?verify=false'
-  user = 'exuyufe'
+  url1 = '' #your jenkins url
+  user = '' #your jenkins user
   passwd = getpass.getpass('Password:')
   user_auth = HTTPBasicAuth(user, passwd)
   #this will return a html-format respone, and we need a html parser to get all jobs
