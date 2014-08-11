@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 '''
@@ -21,7 +21,7 @@ def ex1():
     1.print out 'Hey Python! I'm coming!'
   '''
   #----Fill your codes below---
-  
+  print 'Hey Python! I\'m coming!' 
   #----------------------------
   None
 
@@ -35,7 +35,7 @@ def ex2():
   s1 = 'abcd'
   s2 = '1234'
   #----Fill your codes below---
-    
+  print s1[1::2] + s2[1:3]  
   #----------------------------
   #print ''.join([i for i in s1[1::2]] + [j for j in s2[1:3]])
 
@@ -49,7 +49,11 @@ def ex3():
   '''
   s = 'vadfdfbblbldafbdfkdbaadbb'
   #----Fill your codes below---
-    
+  count = 0
+  for i in s:
+    if i == 'b':
+      count += 1
+  print '%s has %d b' %(s, count)
   #----------------------------
   #print s.count('b')
   
@@ -63,7 +67,11 @@ def ex4():
   '''
   s = range(2, 200, 5)
   #----Fill your codes below---
-    
+  s2 = []
+  for i in s:
+    if i % 3 == 0:
+      s2.append(i)
+  print s2  
   #----------------------------
   #print [i for i in s if i%3==0]
 
@@ -83,12 +91,18 @@ def ex5():
     'friends': ['Tom', 'Jerry', 'Tom', 'Micky', 'Micky'],
   }
   #----Fill your codes below---
-  
+  s['phone']['business'] = '021-43215'
+  s['friends'] = list(set(s['friends']))
+  print s
   #----------------------------
 
 # ==============Exercise 6==============
 #----Fill your codes below---
-
+def fib(n):
+  ls = [0, 1]
+  for i in range(2,n):
+    ls.append(ls[i-1]+ls[i-2])
+  return ls
 #----------------------------
   
 def ex6():
@@ -98,7 +112,7 @@ def ex6():
     1.define a recursive function fib(a, b, n)  -> 0 1 1 2 3 5 8
     2.print Fibnacci series up to n when calling it  
   '''
-  fib(0, 1, 200)
+  print fib(200)
   
 # ==============Exercise 7==============
 import json
@@ -188,9 +202,35 @@ def ex9():
 #===============Basic Functions=========
 def run_exercise(exer_number):
   func_name = 'ex%d()'%(exer_number)
-  print '#--Start running exercise', exer_number
+  #printc('white', 'blue', '#--Exercise %d start'%exer_number)
+  print '\033[0m#--Exercise %d start\033[1m'%exer_number
   exec(func_name)
-  print '#--End of running exercise', exer_number
+  print '\033[0m#--Exercise %d stop'%exer_number
+  #printc('white', 'blue', '#--Exercise %d stop'%exer_number)
+
+
+#===============colorful output=========
+bgc_dict = {}
+fgc_dict = {}
+
+fgc_dict['red']     = 31
+fgc_dict['green']   = 32
+fgc_dict['yellow']   = 33
+fgc_dict['blue']    = 34
+fgc_dict['purple']  = 35
+fgc_dict['white']   = 37
+fgc_dict['black']   = 30
+
+bgc_dict['red']     = 41
+bgc_dict['green']   = 42
+bgc_dict['yellow']   = 43
+bgc_dict['blue']    = 44
+bgc_dict['purple']  = 45
+bgc_dict['white']   = 47
+bgc_dict['black']   = 49
+
+def printc(bgc,fgc, str):
+  print '\033[5m\033[%d;%dm%s\033[0m' %(bgc_dict[bgc], fgc_dict[fgc], str)
 
 # ==============Main====================
 if __name__ == '__main__':
@@ -204,4 +244,4 @@ if __name__ == '__main__':
     else:
       print __doc__
   except Exception,e:
-    print e  
+    print e 
