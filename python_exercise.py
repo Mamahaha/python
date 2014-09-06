@@ -1,6 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
-
+#-*-coding:utf-8 -*-
 '''
 Python exercises
 Usage: python_exercise.py [Options]
@@ -16,34 +15,57 @@ import argparse as AP
 # ==============Exercise 1==============
 def ex1():
   ''' 
-  hello world
+  point:
+    1. usage of print
+    2. usage of escape character \
+    3. difference of single_quotes, double_quotes, triple_quotes
   task:
-    1.print out 'Hey Python! I'm coming!'
+    1.print out 'Hey Python, I'm xx'
   '''
   #----Fill your codes below---
-  print 'Hey Python! I\'m coming!' 
+  
   #----------------------------
-  None
+  #print 'Hey Python, I\'m %s, code %d!' %('华安', 9527)
+  pass
 
 # ==============Exercise 2==============
 def ex2():
   '''
-  string operations
+  variable types
+  point:
+    1. variable assignment (=, +=, -=, *=, /=, %=, **=, //=)
+    2. basic arthmetic operators (+, -, *, /, %, **, //)
+    3. string operations (slice and concatenation)
+    4. data type conversion (int(x), long(x), float(x), str(x), eval(str), tuple(s), set(s), dict(s), ord(x), hex(x))
+    5. #optional# check data type (type(var))
+    6. #optional# check attributes of a variable (dir(var))
   task:
-    1. create a new string 'bd23' by cutting & merging s1 and s2
+    1. create a new string 'bd23' by cutting & merging str1 and int2
   '''
-  s1 = 'abcd'
-  s2 = '1234'
+  int1 = 100
+  float1 = float2 = 100.4
+  str1, int2 = 'abcd', 1234
   #----Fill your codes below---
-  print s1[1::2] + s2[1:3]  
+  
   #----------------------------
-  #print ''.join([i for i in s1[1::2]] + [j for j in s2[1:3]])
+  #str3 = s1[1::2] + s2[1:3]  
+  str3 = ''.join([i for i in str1[1::2]] + [j for j in str(int2)[1:3]])
+  print str3
 
 
 # ==============Exercise 3==============
 def ex3():
   '''
   control flow
+  point:
+    1. comparison operators(==, !=, <>, >, >=, <=)
+    2. logical operators (and, or, not, in, is, is not)
+    3. if : elif : else
+    4. for :
+    5. for item in items:
+    6. while :
+    7. do: while
+    8. #optional# get the address of a variable (id(var))
   task:
     1. count how many 'b' in string s by looping string and checking each character
   '''
@@ -51,17 +73,24 @@ def ex3():
   #----Fill your codes below---
   count = 0
   for i in s:
-    if i == 'b':
+    if not i != 'b':
       count += 1
   print '%s has %d b' %(s, count)
   #----------------------------
   #print s.count('b')
-  
-  
+ 
+
 # ==============Exercise 4==============
 def ex4():
   '''
-  list operations
+  list & tuple operations
+  point:
+    1. define an empty list  (s=[])
+    2. define an empty tuple (s=())
+    3. update an item in list   (items[index] = new_value)
+    4. add a new item into list (append(item))
+    5. remove an item from list (del items[index]) (items.remove(item))
+    6. #optional# range() and xrange()
   task:
     1. create a new list with numbers that can be divided by 3 in list s
   '''
@@ -79,6 +108,9 @@ def ex4():
 def ex5():
   '''
   dictionary & set operations
+  points:
+    1. define an empty dict (s={})
+    2. dict operations(add, update, remove, search) 
   task:
     1.add a new phone number 'business' : '021-43215' in dict s
     2.remove duplicated friends from dict s
@@ -108,11 +140,16 @@ def fib(n):
 def ex6():
   '''
   function definition
+  points:
+    1. input parameters(f1(a1, a2), f2(a1, a2=1)
+    2. parameter passing mode (for mutable objects and immutable objects: passing by reference)
+    3. the difference of variable and object
+    3. output parameters 
   taks:
     1.define a recursive function fib(a, b, n)  -> 0 1 1 2 3 5 8
     2.print Fibnacci series up to n when calling it  
   '''
-  print fib(200)
+  print fib(20)
   
 # ==============Exercise 7==============
 import json
@@ -121,6 +158,10 @@ import requests
 def ex7():
   '''
   parse JSON data
+  point:
+    1. get to know json
+    2. get to know restful API
+    3. #optional# use curl command to check the output (curl -i -X GET http://httpbin.org/get)
   task:
     1.get the value of 'origin' from json_data
     2.get the value of 'Connection' from json_data
@@ -128,9 +169,12 @@ def ex7():
   server = "http://httpbin.org/get"
   r = requests.get(server)
   json_data = r.json()
+  #print json_data
   #----Fill your codes below---
   
   #----------------------------
+  #print json_data['origin']
+  #print json_data['headers']['Connection']
   
 # ==============Exercise 8 (bonus)==============
 def curry_a(a):
@@ -198,12 +242,12 @@ def ex9():
   #----------------------------
   pass
   
-  
+ 
 #===============Basic Functions=========
 def run_exercise(exer_number):
   func_name = 'ex%d()'%(exer_number)
   #printc('white', 'blue', '#--Exercise %d start'%exer_number)
-  print '\033[0m#--Exercise %d start\033[1m'%exer_number
+  print '\033[0m#--Exercise %d start\033[1m\033[7m'%exer_number
   exec(func_name)
   print '\033[0m#--Exercise %d stop'%exer_number
   #printc('white', 'blue', '#--Exercise %d stop'%exer_number)
@@ -244,4 +288,4 @@ if __name__ == '__main__':
     else:
       print __doc__
   except Exception,e:
-    print e 
+    print e
