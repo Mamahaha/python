@@ -8,11 +8,12 @@ Options:
   -n --number <number>            exercise number 
 
 Mail bug reports and suggestion to : Led Xu <led.xu@ericsson.com>
+More python knowledges in http://www.tutorialspoint.com/python/
 '''
 
-import argparse as AP
 
-# ==============Exercise 1==============
+
+# ==============Basic Exercise 1==============
 def ex1():
   ''' 
   point:
@@ -25,10 +26,10 @@ def ex1():
   #----Fill your codes below---
   
   #----------------------------
-  #print 'Hey Python, I\'m %s, code %d!' %('华安', 9527)
+  print 'Hey Python, I\'m %s, code %d!' %('华安', 9527)
   pass
 
-# ==============Exercise 2==============
+# ==============Basic Exercise 2==============
 def ex2():
   '''
   variable types
@@ -53,7 +54,7 @@ def ex2():
   print str3
 
 
-# ==============Exercise 3==============
+# ==============Basic Exercise 3==============
 def ex3():
   '''
   control flow
@@ -80,7 +81,7 @@ def ex3():
   #print s.count('b')
  
 
-# ==============Exercise 4==============
+# ==============Basic Exercise 4==============
 def ex4():
   '''
   list & tuple operations
@@ -104,7 +105,7 @@ def ex4():
   #----------------------------
   #print [i for i in s if i%3==0]
 
-# ==============Exercise 5==============
+# ==============Basic Exercise 5==============
 def ex5():
   '''
   dictionary & set operations
@@ -128,7 +129,7 @@ def ex5():
   print s
   #----------------------------
 
-# ==============Exercise 6==============
+# ==============Basic Exercise 6==============
 #----Fill your codes below---
 def fib(n):
   ls = [0, 1]
@@ -150,12 +151,40 @@ def ex6():
     2.print Fibnacci series up to n when calling it  
   '''
   print fib(20)
-  
-# ==============Exercise 7==============
+
+# ==============Basic Exercise 7==============
+class phone_book:
+  '''
+  phone book attributes and operations
+  '''
+  __pb_dict__ = {}
+  def __init__(self):
+    pass
+  def query(self, name):
+    pass
+  def update(self, name, number):
+    pass
+  def remove(self, name):
+    pass
+
+def ex7():
+  '''
+  class usage
+  task:
+    1.complete the operations of class phone_book 
+    2.add a new phone number 'Ayanami' : '021-43215'
+    2.clear phone book
+  '''
+  #----Fill your codes below---
+
+  #----------------------------
+  pass
+
+# ==============Basic Exercise 8==============
 import json
 import requests
 
-def ex7():
+def ex8():
   '''
   parse JSON data
   point:
@@ -169,22 +198,29 @@ def ex7():
   server = "http://httpbin.org/get"
   r = requests.get(server)
   json_data = r.json()
-  #print json_data
+  print json_data
   #----Fill your codes below---
   
   #----------------------------
   #print json_data['origin']
   #print json_data['headers']['Connection']
   
-# ==============Exercise 8 (bonus)==============
+# ==============Advanced Exercise 9 (bonus)==============
+from functional import *
+
 def curry_a(a):
   def curry_b(b):
     def curry_c(c, d, e):
       print a, b, c, d, e
     return curry_c
   return curry_b
+
+#curry_all = lambda a,b,c,d,e : print a,b,c,d,e
+#curry_a = curry(curry_all)
+#curry_b = curry_a(a)
+#curry_c = curry_b(b)
       
-def ex8():
+def ex9():
   '''
   higher order functions
   task:
@@ -207,12 +243,13 @@ def ex8():
   s4 = [1,2,3,4]
   #result = reduce(lambda x,y:x+y, s4)
   #----currying-------------
-  c1 = curry_a(1)
+  #c1 = curry_a(1)
   #c2 = c1(2)
   #c2(3, 4, 5)
+  curry_a(1)(2)(3,4,5)
 
 
-# ==============Exercise 9 (bonus)==============
+# ==============Advanced Exercise 10 (bonus)==============
 import subprocess
 
 def run_cmd(cmd):
@@ -227,7 +264,7 @@ def run_cmd(cmd):
       print '[Error]: Failed to run command <%s>' %cmd
       raise 
   
-def ex9():
+def ex10():
   '''
   use run_cmd() to access your git repository
   task:
@@ -277,6 +314,8 @@ def printc(bgc,fgc, str):
   print '\033[5m\033[%d;%dm%s\033[0m' %(bgc_dict[bgc], fgc_dict[fgc], str)
 
 # ==============Main====================
+import argparse as AP
+
 if __name__ == '__main__':
   try:
     parser = AP.ArgumentParser()
