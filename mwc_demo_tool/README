@@ -1,0 +1,35 @@
+## Introduction
+This tool is used to send AddContent NBI request to BDC automatically and periodically.
+
+## Install
+Already in folder "/root/mwc_demo_tool/" in BMC node
+
+## Uninstall
+Remove folder "/root/mwc_demo_tool/" in BMC node
+
+## How to use
+1. on BMC GUI:
+  1.1 Add a VOD ONCE service "mwc_service"
+  1.2 Add service bearer "mwc_sb" and user service "mwc_us" in the service
+  1.3 Add a broadcast "mwc_bc" with a long-time scheduler (for example 7 days)
+  1.4 Add 11 file_url into content, each file has a 5 minutes scheduler and no overlapping.
+  1.5 Schedule broadcast "mwc_bc"
+  1.6 Get current content ID "content_id" and delivery session instance ID "delivery_session_instance_id"
+Note : Make sure all files can be deployed within 55 minutes.
+  
+2. on CDN:
+  2.1 Backup ServiceAnnouncement.xml.gz
+  2.2 [root@CDN]# gzip -d ServiceAnnouncement.xml.gz
+  2.3 [root@CDN]# vim ServiceAnnouncement.xml
+  2.4 Remove all file_schedule info in SAF and save it.
+  2.5 [root@CDN]# gzip ServiceAnnouncement.xml
+Note: Make sure SAF cannot be updated during the whole DEMO period. Once changed, need redo step2.1 - 2.5.
+  
+3. on BMC:
+  3.1 About 55 minutes after "mwc_service" is scheduled, do below steps:
+  3.2 [root@MS-1]# cd /root/mwc_demo_tool/
+  3.3 [root@MS-1]# vim mwc_demo_tool.py
+    3.3.1 Update "delivery_session_instance_id" with the value got from step1.6.
+    3.3.2 Increase the value of "content_id" by 1 got from step1.6 and update it.
+    3.3.3 Update file url list.
+  3.4 [root@MS-1]# ./mwc_demo_tool.py refresh &
