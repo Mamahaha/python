@@ -38,7 +38,7 @@ def ex2():
     2. basic arthmetic operators (+, -, *, /, %, **, //)
     3. string operations (slice and concatenation)
     4. data type conversion (int(x), long(x), float(x), str(x), eval(str), tuple(s), set(s), dict(s), ord(x), hex(x))
-    5. #optional# check data type (type(var))
+    5. #optional# check data type (type(var))  ---- type belongs to object, not variable. A variable is just a ref of obj in memory.
     6. #optional# check attributes of a variable (dir(var))
   task:
     1. create a new string 'bd23' by cutting & merging str1 and int2
