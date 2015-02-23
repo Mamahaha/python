@@ -2,7 +2,7 @@
 
 
 ########## Variables, need to be updated before running the script
-refresh_content_interval = 3300 #seconds
+refresh_content_interval = 3300 #seconds, only used for refresh_content_static()
 
 delivery_session_instance_id = 362
 content_id = 255
@@ -15,7 +15,8 @@ file_url = [
 add_rcq    = './addContent.rcq'
 remove_rcq = './removeContent.rcq'
 result_path   = '/var/tmp/rcq_result'
-########### Functions ################
+
+########### Common Functions ################
 def generate_add_rcq(cid):
     print '[INFO]: Start generating AddContent request...'
     server_url = 'http://10.0.50.191:8080/bm-sc/mdf-cp/nbi/deliverySession/addContent/%d?origin=localhost' %(delivery_session_instance_id)
@@ -51,7 +52,16 @@ def write_file(content, file_path):
         print '[Error]: Failed to write file.' %file_path
         raise 
 
-
+def printc(bgc,fgc, str):
+    print '\033[5m\033[%d;%dm%s\033[0m' %(bgc, fgc, str)
+  
+def display_usage():
+    print '\n*=======================================================================================================================*'
+    print '\033[7m* Name        : mwc_demo_tool'
+    print '* Description : This tool is used to send AddContent request automatically to BDC periodically.'
+    print '* Usage       : ./mwc_demo_tool.py refresh\033[0m'
+    print '*=======================================================================================================================*\n'
+    
 import subprocess
 def run_cmd(cmd):
     '''
@@ -65,8 +75,8 @@ def run_cmd(cmd):
         print '[Error]: Failed to run command <%s>.' %cmd
         raise 
 
-import time   
-def refresh_content():
+import time
+def refresh_content_static():
     global content_id
     
     while True:
@@ -90,16 +100,46 @@ def refresh_content():
         print '[INFO]: End of refreshing content. Sleep for %d seconds.' %(refresh_content_interval)
         time.sleep(refresh_content_interval)
 
-def printc(bgc,fgc, str):
-  print '\033[5m\033[%d;%dm%s\033[0m' %(bgc, fgc, str)
-  
-def display_usage():
-    print '\n*=======================================================================================================================*'
-    print '\033[7m* Name        : mwc_demo_tool'
-    print '* Description : This tool is used to send AddContent request automatically to BDC periodically.'
-    print '* Usage       : ./mwc_demo_tool.py refresh\033[0m'
-    print '*=======================================================================================================================*\n'
+from datetime import datetime
+def refresh_content_dynamic():
+    global content_id
+    
+    while True:
+        now = datetime.now()
+        interval = (60 - int(now.minute)) * 60 - int(now.second)
+        print '[INFO]: Next AddContent will be triggered after %d seconds.' %(interval)
+        time.sleep(interval)
+        
+        print '[INFO]: Start refreshing content at:', datetime.now()
 
+        run_cmd('rm -f *.rcq')
+        generate_add_rcq(content_id)
+        content_id += 1
+
+        run_cmd('mkdir -p %s' %(result_path))
+        run_cmd('rm -f %s/*' %(result_path))
+
+        run_cmd('java -jar restclient-cli-2.5-jar-with-dependencies.jar %s -o %s' %(add_rcq, result_path))
+
+        print '[INFO]: Result of AddContent:'
+        (result, err) = run_cmd('cat %s/*.rcs' %(result_path))
+        lines = result.split('\n')
+        for line in lines:
+            printc(32, 49, line)
+        time.sleep(30)
+
+########### Test Function ################
+def test_refresh():
+    while True:
+        now = datetime.now()
+        interval = (60 - int(now.minute)) * 60 - int(now.second)
+        print 'Original time: %s' %(now), ', will wait for: %d' %(interval) 
+        time.sleep(interval)
+        
+        print 'Current time:', datetime.now().minute, datetime.now().second
+        time.sleep(10)
+
+########### Main ################
 import sys
 if __name__ == '__main__':
     if len(sys.argv) != 2:
@@ -112,7 +152,9 @@ if __name__ == '__main__':
         generate_add_rcq(content_id)
         generate_remove_rcq(content_id)
     elif mode == 'refresh':
-        refresh_content()
+        #refresh_content_static()
+        refresh_content_dynamic()
     else:
         display_usage()
-
+else:
+    test_refresh()
