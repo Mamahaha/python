@@ -4,8 +4,8 @@ hdfs dfs -mkdir /input
 hdfs dfs -copyFromLocal The_Testament.txt /input/
 
 hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-*.jar \
-  -mapper ~/work/github/python/hadoop_test/mapper.py \
-  -reducer ~/work/github/python/hadoop_test/reducer.py \
+  -mapper ./mapper.py \
+  -reducer ./reducer.py \
   -input /input/The_Testament.txt \
   -output /output
 
