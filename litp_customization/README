@@ -1,0 +1,12 @@
+==changed files==
+/opt/ericsson/nms/litp/lib/core/litp_defaults.py
+/opt/ericsson/nms/litp/lib/core/litp_item.py
+/opt/ericsson/nms/litp/lib/litp_graphs/network_graph_consts.py
+/opt/ericsson/nms/litp/lib/litp_graphs/network_graph_topology.py
+/opt/ericsson/nms/litp/lib/litp_netconf/linux_net_config.py
+
+/opt/ericsson/nms/litp/share/xsd/network/ng-bond.xsd
+
+/root/embm/sc_netgraph.xml
+
+

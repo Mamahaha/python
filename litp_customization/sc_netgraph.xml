@@ -1,0 +1,57 @@
+<litp:net-graph-topology xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:litp="http://www.ericsson.com/litp" xsi:schemaLocation="http://www.ericsson.com/litp litp.xsd" id="NetGraph">
+  <graph_name>From NG Items</graph_name>
+  <require></require>
+  <litp:ng-bond id="bond_0">
+    <children>nic_0,nic_1</children>
+    <primary>nic_1</primary>
+    <require></require>
+  </litp:ng-bond>
+  <litp:ng-bond id="bond_1">
+    <children>nic_2,nic_3</children>
+    <mode>1</mode>
+    <primary>nic_3</primary>
+    <require></require>
+  </litp:ng-bond>
+  <litp:ng-bond id="bond_2">
+    <children>nic_4,nic_5</children>
+    <require></require>
+  </litp:ng-bond>
+  <litp:ng-net id="net_mgmt">
+    <children>bond_0</children>
+    <require></require>
+  </litp:ng-net>
+  <litp:ng-net id="net_traffic">
+    <children>bond_1</children>
+    <require></require>
+  </litp:ng-net>
+  <litp:ng-net id="net_oam">
+    <children>bond_2</children>
+    <require></require>
+  </litp:ng-net>
+  <litp:ng-net id="net_HB1">
+    <children>nic_7</children>
+    <ip_optional>True</ip_optional>
+    <require></require>
+  </litp:ng-net>
+  <litp:ng-nic id="nic_0">
+    <require></require>
+  </litp:ng-nic>
+  <litp:ng-nic id="nic_1">
+    <require></require>
+  </litp:ng-nic>
+  <litp:ng-nic id="nic_2">
+    <require></require>
+  </litp:ng-nic>
+  <litp:ng-nic id="nic_3">
+    <require></require>
+  </litp:ng-nic>
+  <litp:ng-nic id="nic_4">
+    <require></require>
+  </litp:ng-nic>
+  <litp:ng-nic id="nic_5">
+    <require></require>
+  </litp:ng-nic>
+  <litp:ng-nic id="nic_7">
+    <require></require>
+  </litp:ng-nic>
+</litp:net-graph-topology>
