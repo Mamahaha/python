@@ -1,0 +1,23 @@
+
+              
+[CANDIDATE COMMAND LIST]
+check_event_port:   1
+check_karaf_thread: 0
+check_karaf_thread1: 1
+check_karaf_thread2: 0
+
+[BMC LIST]
+bmc1: 192.168.1.11
+bmc2: 192.168.1.12
+        
+[BMC STATUS COMMAND]
+check_event_port:   netstat -an | grep 9889 | grep -v grep | grep LISTEN | wc -l
+check_karaf_thread: ps -ef | grep java | grep -v grep | wc -l
+
+[BMC STATUS RESULT]
+check_event_port:   2
+check_karaf_thread: 1
+
+[BMC STATUS OUTPUT]
+check_event_port:   OK;NOK
+check_karaf_thread: GOOD;BAD

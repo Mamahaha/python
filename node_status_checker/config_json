@@ -1,0 +1,24 @@
+{
+    "command-list": {
+        "check-event-port": 1,
+        "check-karaf-process": 1
+    },
+    "nodes": {
+        "bmc1": "localhost",
+        "bmc2": "localhost"
+    },    
+    "check-event-port": {         
+        "cmd": "netstat -an | grep 9889 | grep -v grep | grep LISTEN | wc -l",
+        "description": "Check if event port 8055 is ready",
+        "expect": "2", 
+        "true": "OK",
+        "false": "NOK"
+    }, 
+    "check-karaf-process": {
+        "cmd": "ps -ef | grep java | grep -v grep | wc -l",
+        "description": "Check if karaf process is running",
+        "expect": "1",
+        "true": "GOOD",
+        "false": "BAD"
+    }
+}
