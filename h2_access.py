@@ -105,7 +105,6 @@ def update_record(p):
         nodes_instance.update_record(p[2], p[3], p[4], p[5], p[6], p[7])        
 
 def get_records(p):
-
     if len(p) != 3:
         print_usage()
     else:

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<common-config xmlns="http://org.xml/common-config">
+    <env>
+        <category>design</category>
+        <node>
+            <ip>10.170.65.116</ip>
+        </node>
+        <node>
+            <ip>10.170.65.117</ip>
+        </node>
+    </env>
+</common-config>

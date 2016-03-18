@@ -201,8 +201,6 @@ class check_status_thread(threading.Thread):
             time.sleep(3)
             count += 1
             print '%s start %s' %(self.name, time.ctime(time.time()))
-def check_single_status(node_name, check_cmd):
-    None
 
 def check_all_nodes():
     bmcs = ('bmc1', 'bmc2')
@@ -228,6 +226,7 @@ def test_cmd():
         print 'Good status'
     else:
         print 'Bad status:', result
+        
 def test_multi_cmds():
     #cmds = ['cat ~/scripts/set_route.sh', 'curl -oO http://wiki.jikexueyuan.com/project/the-python-study-notes-second-edition/operating-system.html', 
     #        'ls -al ~/ | grep workspace', 'ps -ef  | grep 9889 | grep -v grep', 'ls /tmp/ | grep gc']
