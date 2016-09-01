@@ -24,10 +24,16 @@ def run_cmd(cmd):
         
   
 import psycopg2
-def init_db(db):
-    run_cmd('%s/init_db.sh %s' %(MODULE_FOLDER, DB_NAME))
+def create_db_bash(db):
+    run_cmd('odb c %s' %(db))
+
+def create_tables_bash(db):
+    run_cmd('odb ct %s' %(db))
+
+def drop_tables_bash(db):
+    run_cmd('odb dt %s' %(db))
     
-def init_tables(db):
+def create_tables(db):
     conn = psycopg2.connect(database=db)
     cur = conn.cursor()    
     
@@ -48,6 +54,10 @@ def init_tables(db):
     conn.close()
 
 def adjust_content(old_ct):
+    '''
+    For sql command, if there exists char ', it should be replaced with double '.
+    And so does to other special characters.
+    '''
     new_ct = old_ct.replace('\'', '\'\'')
     return new_ct
 
@@ -67,7 +77,7 @@ def parse_feature(feature):
     ct = feature.find('content').text
     return (name, ver, tp, des, ct)
         
-def fill_db(db):
+def fill_content(db):
     conn = psycopg2.connect(database=db)
     cur = conn.cursor()
     
@@ -90,7 +100,7 @@ def fill_db(db):
     conn.commit()
     conn.close()
     
-def clear_db(db):
+def drop_tables(db):
     conn = psycopg2.connect(database=db)
     cur = conn.cursor()
     for file_name in module_list:
@@ -131,26 +141,36 @@ def list_feature_db(db, m_prefix):
     sql_cmd = 'SELECT name, version, description FROM %s;' %(get_module(m_prefix))
     cur.execute(sql_cmd)
     rows = cur.fetchall()
-    conn.close()
-    
     for row in rows:
         line = '* ' + row[0].ljust(20) + ' | ' + row[1].ljust(7) + ' | ' + row[2]
         printc('black', 'yellow', line)
-    
-    
+    conn.close()
+        
 def show_feature_db(db, m_prefix, f_prefix):
     conn = psycopg2.connect(database=db)
     cur = conn.cursor()
     sql_cmd = 'SELECT name, type, content FROM %s WHERE name LIKE \'%s%%\';' %(get_module(m_prefix), f_prefix)
     cur.execute(sql_cmd)
     rows = cur.fetchall()
-    conn.close()
-    
     for row in rows:
         printc('blue', 'white', '===============%s================' %(row[0]))
         show_content(row[2], row[1])
-    
-    
+    conn.close()
+
+import json  
+def module_to_json(db, m_prefix):
+    conn = psycopg2.connect(database=db)
+    cur = conn.cursor()
+    sql_cmd = 'SELECT row_to_json(t) FROM (SELECT * from %s) t;' %(get_module(m_prefix))
+    cur.execute(sql_cmd)
+    rows = cur.fetchall()
+    js = json.dumps(rows, indent=1)
+    print js
+    conn.close()
+    #jd = json.loads(js)
+    #print jd[0][0]['name']
+
+        
 import sys
 def log_error_and_exit(msg):
     printc('black', 'red', 'ERROR: %s\n' %msg)
@@ -170,7 +190,7 @@ def show_content(content, content_type):
     elif content_type == 'text':
         lines = content.strip().split('\n')
         for line in lines:
-            ll = line.strip()
+            ll = unicode(line, "utf8", errors="ignore").strip()
             if ll.startswith('----'):
                 printc('black', 'yellow', '%s' %(ll))
             else:
@@ -205,19 +225,21 @@ def printc(bgc,fgc, msg):
     print '\033[%d;%dm%s\033[0m' %(bgc_dict[bgc], fgc_dict[fgc], msg)
 
 def show_usage():
-    printc('black', 'blue', '** 6 usages: **')
-    printc('black', 'yellow', '1. Show all modules')
+    printc('black', 'blue', '** 7 usages: **')
+    printc('black', 'yellow', '==Show usage==')
     printc('black', 'deep_g', '   md')
-    printc('black', 'yellow', '2. Update database')
+    printc('black', 'yellow', '==Update database==')
     printc('black', 'deep_g', '   md a')
-    printc('black', 'yellow', '3. Clean database')
+    printc('black', 'yellow', '==Clean database==')
     printc('black', 'deep_g', '   md d')
-    printc('black', 'yellow', '4. Show all modules')
+    printc('black', 'yellow', '==Show all modules==')
     printc('black', 'deep_g', '   md l')
-    printc('black', 'yellow', '5. Show all features in a module')
+    printc('black', 'yellow', '==Show all features in a module==')
     printc('black', 'deep_g', '   md <module>')
-    printc('black', 'yellow', '6. Show the content of a feature')
+    printc('black', 'yellow', '==Show the content of a feature==')
     printc('black', 'deep_g', '   md <module> <feature>')
+    printc('black', 'yellow', '==Show a module as JSON format==')
+    printc('black', 'deep_g', '   md j <module>')
     
 if __name__ == '__main__':
     init()
@@ -225,18 +247,21 @@ if __name__ == '__main__':
         show_usage()
     elif len(sys.argv) == 2:
         if sys.argv[1] == 'a':
-            init_db(DB_NAME)
-            init_tables(DB_NAME)
-            clear_db(DB_NAME)
-            fill_db(DB_NAME)
+            create_db_bash(DB_NAME)
+            drop_tables_bash(DB_NAME)
+            create_tables_bash(DB_NAME)
+            fill_content(DB_NAME)
         elif sys.argv[1] == 'd':
-            clear_db(DB_NAME)
+            drop_tables_bash(DB_NAME)
         elif sys.argv[1] == 'l':
             list_module_db(DB_NAME)
         else:
             list_feature_db(DB_NAME, sys.argv[1])
-    elif len(sys.argv) == 3: 
-        show_feature_db(DB_NAME, sys.argv[1], sys.argv[2])
+    elif len(sys.argv) == 3:
+        if sys.argv[1] == 'j':
+            module_to_json(DB_NAME, sys.argv[2])
+        else:
+            show_feature_db(DB_NAME, sys.argv[1], sys.argv[2])
     else:
         show_usage() 
     

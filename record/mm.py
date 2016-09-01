@@ -183,11 +183,7 @@ def printc(bgc,fgc, msg):
     print '\033[%d;%dm%s\033[0m' %(bgc_dict[bgc], fgc_dict[fgc], msg)
 
 
-st = [{"name":"promote","version":"common","type":"text","description":"N/A","content":"\n      \"cp\"  : /opt/twiddle/bin/twiddle.sh -s service:jmx:remoting-jmx://127.0.0.1:9999 invoke com.ericsson.bmsc.mdfcp:service=MdfcpFailoverService promote\n      \"up\"  : pkill -39 mdf-up\n      \"adf\" : /opt/twiddle/bin/twiddle.sh -s service:jmx:remoting-jmx://127.0.0.1:9999 invoke com.ericsson.bmsc.adf.provisioning.failover:service=AdfProvisioningFailoverService promote\n    "}
-,{"name":"license","version":"common","type":"text","description":"Licenses are installed on 2 MDF-DB and ADF-DB nodes","content":"\n      -----------------install a license-----------------\n      su - sentinel\n\t\t\t/opt/sentinel/default/bin/lslic -F /tmp/[license_file_name]\n\t\t\t/opt/sentinel/default/bin/lsmon\n\t\t\t\n\t\t\t-----------------remove a license-----------------\n\t\t\t/opt/sentinel/default/bin/lslic -DL [feature_name] [feature_version] [license_hash_of_inactive_license]\n    "} 
-, {"name":"mdfdb","version":"15a","type":"text","description":"Access Oracle","content":"\n      -----------------Log on to Oracle-----------------\n      # su - oracle\n\t\t\t$ sqlplus 'bmsc/eMbMs1234!'\n\t\t\tSQL> select table_name from user_tables;\n\t\t\tSQL> desc T_DELIVERY_SESSION_INSTANCE;\n\t\t\t-----------------Clear all sessions in mdf-db-----------------\n\t\t\tdelete from t_bmsc_event;\n\t\t\tdelete from t_content;\n\t\t\tdelete from t_delivery_content;\n\t\t\tdelete from t_delivery_session;\n\t\t\tdelete from t_delivery_session_instance;\n\t\t\tdelete from t_embms_session;\n\t\t\tdelete from t_fec_info;\n\t\t\tdelete from t_gateway_info;\n\t\t\tdelete from t_file_repair;\n\t\t\tdelete from t_qos_metrics;\n\t\t\tdelete from t_reception_report;\n\t\t\tdelete from t_success_report;\n\n\t\t\tcommit;\n    "}]
-
-if __name__ != '__main__':
+if __name__ == '__main__':
     init()
     if len(sys.argv) == 1:
         list_module()
@@ -197,9 +193,6 @@ if __name__ != '__main__':
         show_feature(sys.argv[1], sys.argv[2])
     else:
         log_error_and_exit('Input parameters are limited to 2') 
-else:
-    import json
-    b = json.dumps(st, indent=1)
-    print b
+
     
     
