@@ -1,4 +1,4 @@
-#!/c/Python27/python
+#!/usr/bin/python
 #-*-coding:utf-8 -*-
 '''
 Created on Aug 26, 2016
@@ -54,7 +54,7 @@ def printc(bgColor, fgColor, print_text):
 if os.name == 'nt':    
     DATA_FOLDER = 'f:/scripts/record_data'
 else:
-    DATA_FOLDER = '~/script/record_data'
+    DATA_FOLDER = '/mnt/hgfs/scripts/record_data'
 module_list = []
 class RecordHandler(xml.sax.ContentHandler):
     '''
@@ -165,7 +165,7 @@ def list_feature(m_prefix):
     print ''   
     
 def search_feature(feature_name):
-    printc('black', 'cyan', 'Module'.ljust(8) + ' | ' + 'Feature'.ljust(20) + ' | ' + 'Version'.ljust(7) + ' | ' + 'Description')
+    printc('black', 'green', 'Module'.ljust(8) + ' | ' + 'Feature'.ljust(20) + ' | ' + 'Version'.ljust(7) + ' | ' + 'Description')
     for target_module in module_list:
         tree = ET.ElementTree(file='%s/%s' %(DATA_FOLDER, target_module))
         root = tree.getroot()
@@ -233,6 +233,4 @@ if __name__ == '__main__':
             show_feature(sys.argv[1], sys.argv[2])
     else:
         log_error_and_exit('Input parameters are limited to 2') 
-
-    
     
