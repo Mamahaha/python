@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/c/Python27/python
 #-*-coding:utf-8 -*-
 '''
 Created on Aug 26, 2016
@@ -8,12 +8,52 @@ Created on Aug 26, 2016
 
 import xml.etree.ElementTree as ET
 import xml.sax
+import sys
+import os
 
+#===============colorful output=========
+fgc_dict = {
+            'red' : 31,
+            'green' : 32,
+            'yellow' : 33,
+            'blue' : 34,
+            'purple' : 35,
+            'deep_g' : 36,
+            'white' : 37,
+            'black' : 30
+            }
 
+bgc_dict = {
+            'red' : 41,
+            'green' : 42,
+            'yellow' : 43,
+            'blue' : 44,
+            'purple' : 45,
+            'white' : 47,
+            'black' : 49
+            }
+            
+if os.name == 'nt':
+  import wincolor2
+cpt = None
+if os.name == 'nt':
+  cpt = wincolor2.Color()
 
-MODULE_FOLDER = '/home/led/gh/python/record'
+def printc(bgColor, fgColor, print_text):
+  fgc = fgColor
+  bgc = bgColor
+  if fgColor == '':
+    fgc = 'white'
+  if bgColor == '':
+    bgc = 'black'
+  if os.name == 'nt':
+    cpt.ptl(fgc, bgc, print_text)
+  else:
+    print '\033[%d;%dm%s\033[0m' %(bgc_dict[bgColor], fgc_dict[fgColor], print_text)
+
+    
+DATA_FOLDER = 'f:/scripts/record_data'
 module_list = []
-
 class RecordHandler(xml.sax.ContentHandler):
     '''
     Deprecated. 
@@ -75,15 +115,14 @@ def test_ET(file_path):
     for name in names:
         print name.text
 
-import sys
+
 def log_error_and_exit(msg):
     printc('black', 'red', 'ERROR: %s\n' %msg)
     sys.exit()
 
-import os
 def init():
     global module_list
-    for root, dirs, files in os.walk('%s/data' %(MODULE_FOLDER)):
+    for root, dirs, files in os.walk('%s' %(DATA_FOLDER)):
         module_list = files
 
 def get_module(m_prefix):
@@ -106,7 +145,7 @@ def list_module():
 def list_feature(m_prefix):
     target_module = get_module(m_prefix)
         
-    tree = ET.ElementTree(file='%s/data/%s' %(MODULE_FOLDER, target_module))
+    tree = ET.ElementTree(file='%s/%s' %(DATA_FOLDER, target_module))
     root = tree.getroot()
     features = root.findall('./feature')
     #print '===============Feature list in %s================' %(module_name)
@@ -123,11 +162,31 @@ def list_feature(m_prefix):
             printc('black', 'yellow', line)
     print ''   
     
+def search_feature(feature_name):
+    printc('black', 'cyan', 'Module'.ljust(8) + ' | ' + 'Feature'.ljust(20) + ' | ' + 'Version'.ljust(7) + ' | ' + 'Description')
+    for target_module in module_list:
+        tree = ET.ElementTree(file='%s/%s' %(DATA_FOLDER, target_module))
+        root = tree.getroot()
+        features = root.findall('./feature')
+
+        for feature in features:
+            name = feature.attrib['name']
+            if name != '' and feature_name in name:
+                ver = feature.attrib['version']
+                des = feature.find('description').text
+                if ver == None or ver == '':
+                    ver = 'common'
+                if des == None or des == '':
+                    des = 'N/A'
+                line = target_module.split('.')[0].ljust(8) +  ' | ' + name.ljust(20) + ' | ' + ver.ljust(7) + ' | ' + des
+                printc('black', 'yellow', line)
+    print ''
+
 
 def show_feature(module_name, feature_name):
     target_module = get_module(module_name)
        
-    tree = ET.ElementTree(file='%s/data/%s' %(MODULE_FOLDER, target_module))
+    tree = ET.ElementTree(file='%s/%s' %(DATA_FOLDER, target_module))
     root = tree.getroot()
     features = root.findall('./feature')
     for feature in features:
@@ -156,41 +215,20 @@ def show_content(content, content_type):
 
         print ''
 
-
-#===============colorful output=========
-fgc_dict = {
-            'red' : 31,
-            'green' : 32,
-            'yellow' : 33,
-            'blue' : 34,
-            'purple' : 35,
-            'deep_g' : 36,
-            'white' : 37,
-            'black' : 30
-            }
-
-bgc_dict = {
-            'red' : 41,
-            'green' : 42,
-            'yellow' : 43,
-            'blue' : 44,
-            'purple' : 45,
-            'white' : 47,
-            'black' : 49
-            }
-
-def printc(bgc,fgc, msg):
-    print '\033[%d;%dm%s\033[0m' %(bgc_dict[bgc], fgc_dict[fgc], msg)
-
-
 if __name__ == '__main__':
     init()
     if len(sys.argv) == 1:
         list_module()
     elif len(sys.argv) == 2:
-        list_feature(sys.argv[1])
-    elif len(sys.argv) == 3: 
-        show_feature(sys.argv[1], sys.argv[2])
+        if sys.argv[1] == '?':
+            list_module()
+        else:
+            list_feature(sys.argv[1])
+    elif len(sys.argv) == 3:
+        if sys.argv[1] == '?':
+            search_feature(sys.argv[2])
+        else:
+            show_feature(sys.argv[1], sys.argv[2])
     else:
         log_error_and_exit('Input parameters are limited to 2') 
 
