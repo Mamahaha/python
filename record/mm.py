@@ -51,8 +51,10 @@ def printc(bgColor, fgColor, print_text):
   else:
     print '\033[%d;%dm%s\033[0m' %(bgc_dict[bgColor], fgc_dict[fgColor], print_text)
 
-    
-DATA_FOLDER = 'f:/scripts/record_data'
+if os.name == 'nt':    
+    DATA_FOLDER = 'f:/scripts/record_data'
+else:
+    DATA_FOLDER = '~/script/record_data'
 module_list = []
 class RecordHandler(xml.sax.ContentHandler):
     '''
