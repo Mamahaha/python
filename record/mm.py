@@ -52,7 +52,7 @@ def printc(bgColor, fgColor, print_text):
     print '\033[%d;%dm%s\033[0m' %(bgc_dict[bgColor], fgc_dict[fgColor], print_text)
 
 if os.name == 'nt':    
-    DATA_FOLDER = 'f:/scripts/record_data'
+    DATA_FOLDER = 'c:/work/env/record_data'
 else:
     DATA_FOLDER = '/mnt/hgfs/scripts/record_data'
 module_list = []
